@@ -113,7 +113,7 @@ export default function CallAnalyticsDashboard({ data }: { data: CallData | null
             <h1 className="text-3xl font-black tracking-tight text-black">
               Call Analytics Dashboard
             </h1>
-            <p className="text-neutral-500 mt-1">Real Estate Voice Agent Insights</p>
+            <p className="text-neutral-500 mt-1">Bitlance Voice Dashboard Insights</p>
           </div>
           <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full border-2 border-black">
             <span className="flex items-center gap-2 text-sm font-bold">

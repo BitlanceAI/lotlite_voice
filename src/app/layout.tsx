@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 import Sidebar from "@/components/Sidebar";
 
 export const metadata: Metadata = {
-  title: "Real Estate Voice Agent Dashboard",
-  description: "Modern Call Analytics Dashboard for Real Estate",
+  title: "Bitlance Voice Dashboard",
+  description: "Modern Call Analytics Dashboard",
 };
 
 export default function RootLayout({

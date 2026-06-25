@@ -106,7 +106,7 @@ export default async function VoiceLeadsPage() {
           Voice Leads
         </h1>
         <p className="text-neutral-500 mt-1">
-          All inbound leads captured by the LotLite Real Estate voice agent.
+          All inbound leads captured by the Bitlance Voice Dashboard.
         </p>
       </div>
 
