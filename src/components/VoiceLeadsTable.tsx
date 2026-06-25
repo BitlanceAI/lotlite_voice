@@ -176,8 +176,116 @@ export default function VoiceLeadsTable({ leads }: { leads: VoiceLead[] }) {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-2xl border-2 border-black overflow-hidden">
+      {/* Mobile cards — visible below md */}
+      <div className="md:hidden space-y-3">
+        {filtered.length === 0 ? (
+          <div className="p-8 text-center text-neutral-400 font-medium border-2 border-black rounded-2xl">No leads found.</div>
+        ) : filtered.map((lead) => (
+          <div key={lead.id} className="bg-white border-2 border-black rounded-2xl p-4 space-y-3">
+            {/* Header row */}
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <div className="font-black text-black text-base">
+                  {lead.full_name?.trim() || <span className="text-neutral-400 font-normal">No name</span>}
+                </div>
+                <div className="flex items-center gap-1 text-sm text-neutral-600 mt-0.5">
+                  <Phone className="w-3.5 h-3.5 text-red-600 shrink-0" />
+                  {lead.phone_number?.trim() || <span className="text-neutral-400">No phone</span>}
+                </div>
+                {lead.email?.trim() && (
+                  <div className="flex items-center gap-1 text-xs text-neutral-400 mt-0.5">
+                    <Mail className="w-3 h-3 shrink-0" />
+                    {lead.email.trim()}
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center gap-1 shrink-0">
+                {confirmId === lead.id ? (
+                  <>
+                    <button onClick={() => handleDelete(lead)} disabled={deleting === lead.id}
+                      className="p-1.5 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 transition-colors">
+                      {deleting === lead.id
+                        ? <span className="w-4 h-4 block border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        : <Check className="w-4 h-4" />}
+                    </button>
+                    <button onClick={() => setConfirmId(null)}
+                      className="p-1.5 rounded-lg bg-black text-white hover:bg-neutral-800 transition-colors">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </>
+                ) : (
+                  <button onClick={() => setConfirmId(lead.id)}
+                    className="p-1.5 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 transition-colors">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Badges */}
+            <div className="flex flex-wrap gap-2">
+              <Badge value={lead.preferred_language} map={languageBadge} />
+              <Badge value={lead.purpose} map={purposeBadge} />
+              {lead.property_type && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border-2 border-black text-black capitalize">
+                  <Home className="w-3 h-3" />{lead.property_type}
+                </span>
+              )}
+            </div>
+
+            {/* Details grid */}
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <div>
+                <p className="text-xs text-neutral-400 font-semibold uppercase tracking-wide">Location</p>
+                <div className="flex items-center gap-1 text-black font-medium mt-0.5">
+                  <MapPin className="w-3 h-3 text-red-500 shrink-0" />
+                  {[lead.locality, lead.city].filter(Boolean).join(", ") || "—"}
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-neutral-400 font-semibold uppercase tracking-wide">Budget</p>
+                <div className="flex items-center gap-1 text-black font-bold mt-0.5">
+                  <IndianRupee className="w-3 h-3 text-neutral-400 shrink-0" />
+                  {lead.budget || "—"}
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-neutral-400 font-semibold uppercase tracking-wide">BHK / Size</p>
+                <p className="text-black font-medium mt-0.5">{lead.size_bhk || "—"}</p>
+              </div>
+              <div>
+                <p className="text-xs text-neutral-400 font-semibold uppercase tracking-wide">Timeline</p>
+                <div className="flex items-center gap-1 text-black mt-0.5">
+                  <Clock className="w-3 h-3 text-neutral-400 shrink-0" />
+                  {lead.move_in_timeline || "—"}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between pt-1 border-t border-neutral-100">
+              <span className="text-xs text-neutral-400">{formatDate(lead.call_time)} · {formatDuration(lead.duration_seconds)}</span>
+              <div className="flex items-center gap-1">
+                {lead.recording_url && (
+                  <a href={lead.recording_url} target="_blank" rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg text-black hover:bg-black hover:text-white transition-colors">
+                    <Mic className="w-4 h-4" />
+                  </a>
+                )}
+                {lead.transcript_url && (
+                  <a href={lead.transcript_url} target="_blank" rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg text-neutral-500 hover:bg-neutral-100 transition-colors">
+                    <FileText className="w-4 h-4" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop table — hidden below md */}
+      <div className="hidden md:block bg-white rounded-2xl border-2 border-black overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-12 text-center text-neutral-400 font-medium">No leads found.</div>
         ) : (
@@ -343,6 +451,7 @@ export default function VoiceLeadsTable({ leads }: { leads: VoiceLead[] }) {
           </div>
         )}
       </div>
+      {/* end hidden md:block */}
 
       <p className="text-xs text-neutral-400 text-right font-medium">
         Showing {filtered.length} of {total} calls
